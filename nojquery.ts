@@ -35,10 +35,10 @@ class NoJq{
     /**
     * Utiliza selector base para ocultar el elemento
     * {. : class, # : id, none : tag}
-    * @method hide
+    * @method hideForAll
     * @param {string} pattern - elemento(s) a ocultar
     */
-    static hide(pattern: string){
+    static hideForAll(pattern: string){
         for(let e of document.querySelectorAll(pattern)){
             NoJq.hideElement(e);
         }
@@ -47,10 +47,10 @@ class NoJq{
     /**
     * Utiliza selector base para mostrar el elemento.
     * {. : class, # : id, none : tag}
-    * @method show
+    * @method showForAll
     * @param {string} pattern - elemento(s) a mostrar.
     */
-    static show(pattern: string){
+    static showForAll(pattern: string){
         for(let e of document.querySelectorAll(pattern)){
             NoJq.showElement(e);
         }
@@ -59,20 +59,20 @@ class NoJq{
     /**
     * Para un mejor rendimiento, cuando solo se desee ocultar un elemento
     * es preferible solo utilizar el primer elemento encontrado.
-    * @method hideForFirst
+    * @method hide
     * @param {string} pattern - elemento a utilizar
     */
-    static hideForFirst(pattern: string){
+    static hide(pattern: string){
         NoJq.hideElement(document.querySelector(pattern));
     }
 
     /**
     * Para un mejor rendimiento, cuando solo se desee mostrar un elemento
     * es preferible solo utilizar el primer elemento encontrado.
-    * @method showForFirst
+    * @method show
     * @param {string} pattern - elemento a utilizar
     */
-    static showForFirst(pattern: string){
+    static show(pattern: string){
         NoJq.showElement(document.querySelector(pattern));
     }
 
@@ -129,10 +129,22 @@ class NoJq{
     * @param {string} _event - evento a vincular
     * @param {} listener - callback a llamar cuando se dispare el evento
     */
-    static setListener(pattern: string, _event: string, listener){
+    static setListenerForAll(pattern: string, _event: string, listener){
         for(let e of document.querySelectorAll(pattern)){
             NoJq.setElementListener(_event, e, listener);
         }
+    }
+
+    /**
+    * vincula una acción con un evento para el elemento seleccionado
+    * @method setListener
+    * @param {string} pattern - patrón para buscar el elemento
+    * @param {string} _event - evento a vincular
+    * @param {} listener - callback a llamar cuando se dispare el evento
+    */
+    static setListener(pattern: string, _event: string, listener){
+        if(e = document.querySelector(pattern))
+            NoJq.setElementListener(_event, e, listener);
     }
 
     /**
@@ -140,21 +152,52 @@ class NoJq{
     * @method empty
     * @param {string} pattern - elementos a buscar
     */
-    static empty(pattern: string){
+    static emptyForAll(pattern: string){
         for (let e of document.querySelectorAll(pattern)){
             e.innerHTML = '';
         }
     }
 
-    static remove(pattern: string){
+    /**
+    * deja vacío el primer elemento que encuentre el patron
+    * @method empty
+    * @param {string} pattern - elemento a buscar y utilizar
+    */
+    static empty(pattern: string){
+        if(e = document.querySelector(pattern))
+            e.innerHTML = '';
+    }
+
+    /**
+    * remueve todos los elementos encontrados con el patron de búsqueda
+    * @method removeForAll
+    * @param {string} pattern - elementos a obtener
+    */
+    static removeForAll(pattern: string){
         for (let e of document.querySelectorAll(pattern)){
             e.parentNode.removeChild(e);
         }
     }
 
-    static append(pattern: string){
-
+    /**
+    * remueve el primer elemento encontrado
+    * @method remove
+    * @param {string} pattern - elemento a remover
+    */
+    static remove(pattern: string){
+        if(e = document.querySelector(pattern))
+            e.parentNode.removeChild(e);
     }
 
+    /**
+    * el elemento padre se le agrega un nuevo elemento hijo
+    * @method appendElement
+    * @param {ObjectNode} e - elemento padre
+    * @param {ObjectNode} eToAppend - elemento que será hijo
+    */
+    static appendElement(e, eToAppend){
+        if(!e) return;
+        e.appendChild(eToAppend);
+    }
 
 }

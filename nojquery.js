@@ -39,10 +39,10 @@ var NoJq = (function () {
     /**
     * Utiliza selector base para ocultar el elemento
     * {. : class, # : id, none : tag}
-    * @method hide
+    * @method hideForAll
     * @param {string} pattern - elemento(s) a ocultar
     */
-    NoJq.hide = function (pattern) {
+    NoJq.hideForAll = function (pattern) {
         for (var _i = 0, _a = document.querySelectorAll(pattern); _i < _a.length; _i++) {
             var e = _a[_i];
             NoJq.hideElement(e);
@@ -51,10 +51,10 @@ var NoJq = (function () {
     /**
     * Utiliza selector base para mostrar el elemento.
     * {. : class, # : id, none : tag}
-    * @method show
+    * @method showForAll
     * @param {string} pattern - elemento(s) a mostrar.
     */
-    NoJq.show = function (pattern) {
+    NoJq.showForAll = function (pattern) {
         for (var _i = 0, _a = document.querySelectorAll(pattern); _i < _a.length; _i++) {
             var e = _a[_i];
             NoJq.showElement(e);
@@ -63,19 +63,19 @@ var NoJq = (function () {
     /**
     * Para un mejor rendimiento, cuando solo se desee ocultar un elemento
     * es preferible solo utilizar el primer elemento encontrado.
-    * @method hideForFirst
+    * @method hide
     * @param {string} pattern - elemento a utilizar
     */
-    NoJq.hideForFirst = function (pattern) {
+    NoJq.hide = function (pattern) {
         NoJq.hideElement(document.querySelector(pattern));
     };
     /**
     * Para un mejor rendimiento, cuando solo se desee mostrar un elemento
     * es preferible solo utilizar el primer elemento encontrado.
-    * @method showForFirst
+    * @method show
     * @param {string} pattern - elemento a utilizar
     */
-    NoJq.showForFirst = function (pattern) {
+    NoJq.show = function (pattern) {
         NoJq.showElement(document.querySelector(pattern));
     };
     /**
@@ -126,30 +126,73 @@ var NoJq = (function () {
     * @param {string} _event - evento a vincular
     * @param {} listener - callback a llamar cuando se dispare el evento
     */
-    NoJq.setListener = function (pattern, _event, listener) {
+    NoJq.setListenerForAll = function (pattern, _event, listener) {
         for (var _i = 0, _a = document.querySelectorAll(pattern); _i < _a.length; _i++) {
             var e = _a[_i];
             NoJq.setElementListener(_event, e, listener);
         }
     };
     /**
+    * vincula una acción con un evento para el elemento seleccionado
+    * @method setListener
+    * @param {string} pattern - patrón para buscar el elemento
+    * @param {string} _event - evento a vincular
+    * @param {} listener - callback a llamar cuando se dispare el evento
+    */
+    NoJq.setListener = function (pattern, _event, listener) {
+        if (e = document.querySelector(pattern))
+            NoJq.setElementListener(_event, e, listener);
+    };
+    /**
     * deja vacío un elemento
     * @method empty
     * @param {string} pattern - elementos a buscar
     */
-    NoJq.empty = function (pattern) {
+    NoJq.emptyForAll = function (pattern) {
         for (var _i = 0, _a = document.querySelectorAll(pattern); _i < _a.length; _i++) {
             var e = _a[_i];
             e.innerHTML = '';
         }
     };
-    NoJq.remove = function (pattern) {
+    /**
+    * deja vacío el primer elemento que encuentre el patron
+    * @method empty
+    * @param {string} pattern - elemento a buscar y utilizar
+    */
+    NoJq.empty = function (pattern) {
+        if (e = document.querySelector(pattern))
+            e.innerHTML = '';
+    };
+    /**
+    * remueve todos los elementos encontrados con el patron de búsqueda
+    * @method removeForAll
+    * @param {string} pattern - elementos a obtener
+    */
+    NoJq.removeForAll = function (pattern) {
         for (var _i = 0, _a = document.querySelectorAll(pattern); _i < _a.length; _i++) {
             var e = _a[_i];
             e.parentNode.removeChild(e);
         }
     };
-    NoJq.append = function (pattern) {
+    /**
+    * remueve el primer elemento encontrado
+    * @method remove
+    * @param {string} pattern - elemento a remover
+    */
+    NoJq.remove = function (pattern) {
+        if (e = document.querySelector(pattern))
+            e.parentNode.removeChild(e);
+    };
+    /**
+    * el elemento padre se le agrega un nuevo elemento hijo
+    * @method appendElement
+    * @param {ObjectNode} e - elemento padre
+    * @param {ObjectNode} eToAppend - elemento que será hijo
+    */
+    NoJq.appendElement = function (e, eToAppend) {
+        if (!e)
+            return;
+        e.appendChild(eToAppend);
     };
     return NoJq;
 }());

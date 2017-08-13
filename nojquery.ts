@@ -1,3 +1,8 @@
+/**
+* La mayoría de funciones están basados en
+* http://youmightnotneedjquery.com/
+* esto con la finalidad de realizar tareas sin depender de Jquery
+*/
 class NoJq{
 
     /**
@@ -34,8 +39,7 @@ class NoJq{
     * @param {string} pattern - elemento(s) a ocultar
     */
     static hide(pattern: string){
-        let elements = document.querySelectorAll(pattern);
-        for(let e of elements){
+        for(let e of document.querySelectorAll(pattern)){
             NoJq.hideElement(e);
         }
     }
@@ -47,11 +51,31 @@ class NoJq{
     * @param {string} pattern - elemento(s) a mostrar.
     */
     static show(pattern: string){
-        let elements = document.querySelectorAll(pattern);
-        for(let e of elements){
+        for(let e of document.querySelectorAll(pattern)){
             NoJq.showElement(e);
         }
     }
+
+    /**
+    * Para un mejor rendimiento, cuando solo se desee ocultar un elemento
+    * es preferible solo utilizar el primer elemento encontrado.
+    * @method hideForFirst
+    * @param {string} pattern - elemento a utilizar
+    */
+    static hideForFirst(pattern: string){
+        NoJq.hideElement(document.querySelector(pattern));
+    }
+
+    /**
+    * Para un mejor rendimiento, cuando solo se desee mostrar un elemento
+    * es preferible solo utilizar el primer elemento encontrado.
+    * @method showForFirst
+    * @param {string} pattern - elemento a utilizar
+    */
+    static showForFirst(pattern: string){
+        NoJq.showElement(document.querySelector(pattern));
+    }
+
 
     /**
     * @method setText
@@ -106,10 +130,31 @@ class NoJq{
     * @param {} listener - callback a llamar cuando se dispare el evento
     */
     static setListener(pattern: string, _event: string, listener){
-        let elements = document.querySelectorAll(pattern);
-        for(let e of elements){
+        for(let e of document.querySelectorAll(pattern)){
             NoJq.setElementListener(_event, e, listener);
         }
     }
+
+    /**
+    * deja vacío un elemento
+    * @method empty
+    * @param {string} pattern - elementos a buscar
+    */
+    static empty(pattern: string){
+        for (let e of document.querySelectorAll(pattern)){
+            e.innerHTML = '';
+        }
+    }
+
+    static remove(pattern: string){
+        for (let e of document.querySelectorAll(pattern)){
+            e.parentNode.removeChild(e);
+        }
+    }
+
+    static append(pattern: string){
+
+    }
+
 
 }

@@ -1,3 +1,8 @@
+/**
+* La mayoría de funciones están basados en
+* http://youmightnotneedjquery.com/
+* esto con la finalidad de realizar tareas sin depender de Jquery
+*/
 var NoJq = (function () {
     function NoJq() {
     }
@@ -38,9 +43,8 @@ var NoJq = (function () {
     * @param {string} pattern - elemento(s) a ocultar
     */
     NoJq.hide = function (pattern) {
-        var elements = document.querySelectorAll(pattern);
-        for (var _i = 0, elements_1 = elements; _i < elements_1.length; _i++) {
-            var e = elements_1[_i];
+        for (var _i = 0, _a = document.querySelectorAll(pattern); _i < _a.length; _i++) {
+            var e = _a[_i];
             NoJq.hideElement(e);
         }
     };
@@ -51,11 +55,28 @@ var NoJq = (function () {
     * @param {string} pattern - elemento(s) a mostrar.
     */
     NoJq.show = function (pattern) {
-        var elements = document.querySelectorAll(pattern);
-        for (var _i = 0, elements_2 = elements; _i < elements_2.length; _i++) {
-            var e = elements_2[_i];
+        for (var _i = 0, _a = document.querySelectorAll(pattern); _i < _a.length; _i++) {
+            var e = _a[_i];
             NoJq.showElement(e);
         }
+    };
+    /**
+    * Para un mejor rendimiento, cuando solo se desee ocultar un elemento
+    * es preferible solo utilizar el primer elemento encontrado.
+    * @method hideForFirst
+    * @param {string} pattern - elemento a utilizar
+    */
+    NoJq.hideForFirst = function (pattern) {
+        NoJq.hideElement(document.querySelector(pattern));
+    };
+    /**
+    * Para un mejor rendimiento, cuando solo se desee mostrar un elemento
+    * es preferible solo utilizar el primer elemento encontrado.
+    * @method showForFirst
+    * @param {string} pattern - elemento a utilizar
+    */
+    NoJq.showForFirst = function (pattern) {
+        NoJq.showElement(document.querySelector(pattern));
     };
     /**
     * @method setText
@@ -106,11 +127,29 @@ var NoJq = (function () {
     * @param {} listener - callback a llamar cuando se dispare el evento
     */
     NoJq.setListener = function (pattern, _event, listener) {
-        var elements = document.querySelectorAll(pattern);
-        for (var _i = 0, elements_3 = elements; _i < elements_3.length; _i++) {
-            var e = elements_3[_i];
+        for (var _i = 0, _a = document.querySelectorAll(pattern); _i < _a.length; _i++) {
+            var e = _a[_i];
             NoJq.setElementListener(_event, e, listener);
         }
+    };
+    /**
+    * deja vacío un elemento
+    * @method empty
+    * @param {string} pattern - elementos a buscar
+    */
+    NoJq.empty = function (pattern) {
+        for (var _i = 0, _a = document.querySelectorAll(pattern); _i < _a.length; _i++) {
+            var e = _a[_i];
+            e.innerHTML = '';
+        }
+    };
+    NoJq.remove = function (pattern) {
+        for (var _i = 0, _a = document.querySelectorAll(pattern); _i < _a.length; _i++) {
+            var e = _a[_i];
+            e.parentNode.removeChild(e);
+        }
+    };
+    NoJq.append = function (pattern) {
     };
     return NoJq;
 }());

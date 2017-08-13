@@ -28,117 +28,29 @@ class NoJq{
     }
 
     /**
-    * Oculta elemento(s) utilizando un identificador
-    * @method hideById
-    * @param {string} _id - Elemento a ocultar.
-    */
-    static hideById(_id: string){
-        let e = document.getElementById(_id);
-        NoJq.hideElement(e);
-    }
-
-    /**
-    * Muestra elemento(s) utilizando un identificador.
-    * @method showById
-    * @param {string} _id - Elemento a mostrar.
-    */
-    static showById(_id: string){
-        let e = document.getElementById(_id);
-        NoJq.showElement(e);
-    }
-
-    /**
-    * Oculta elemento(s) utilizando una clase
-    * @method hideByClass
-    * @param {string} _class - Elemento a ocultar.
-    */
-    static hideByClass(_class: string){
-        let elements = document.getElementsByClassName(_class);
-        for(let e of elements){
-            NoJq.hideElement(e);
-        }
-    }
-
-    /**
-    * Muestra elemento(s) utilizando una clase.
-    * @method showByClass
-    * @param {string} _class - Elemento a mostrar.
-    */
-    static showByClass(_class: string){
-        let elements = document.getElementsByClassName(_class);
-        for(let e of elements){
-            NoJq.showElement(e);
-        }
-    }
-
-    /**
-    * Oculta elemento(s) utilizando tags.
-    * @method hideByTag
-    * @param {string} _tag elemento(s) con tag a ocultar.
-    */
-    static hideByTag(_tag: string){
-        let elements = document.getElementsByTagName(_tag);
-        for(let e of elements){
-            NoJq.hideElement(e);
-        }
-    }
-
-    /**
-    * Muestra elemento(s) utilizando tags.
-    * @method showByTag
-    * @param {string} _tag elemento(s) con tag a mostrar.
-    */
-    static showByTag(_tag: string){
-        let elements = document.getElementsByTagName(_tag);
-        for(let e of elements){
-            NoJq.showElement(e);
-        }
-    }
-
-    /**
     * Utiliza selector base para ocultar el elemento
     * {. : class, # : id, none : tag}
     * @method hide
-    * @param {string} element - elemento(s) a ocultar
+    * @param {string} pattern - elemento(s) a ocultar
     */
-    static hide(element: string){
-
-        if (!element){return;}
-
-        let type = element[0];
-        let e = element.substring(1); //elemento(s) a ocultar.
-
-        if(type=='#'){ // hide by id
-            NoJq.hideById(e);
-        }else if(type=='.'){ // hide by class
-            NoJq.hideByClass(e);
-        }else{
-            NoJq.hideByTag(element);
+    static hide(pattern: string){
+        let elements = document.querySelectorAll(pattern);
+        for(let e of elements){
+            NoJq.hideElement(e);
         }
-
     }
 
     /**
     * Utiliza selector base para mostrar el elemento.
     * {. : class, # : id, none : tag}
     * @method show
-    * @param {string} element - elemento(s) a mostrar.
+    * @param {string} pattern - elemento(s) a mostrar.
     */
-    static show(element: string){
-
-        if (!element){return;}
-
-        let type = element[0];
-        let e = element.substring(1); //elemento(s) a ocultar.
-
-        if(type=='#'){ // hide by id
-            NoJq.showById(e);
-        }else if(type=='.'){ // hide by class
-            NoJq.showByClass(e);
-        }else{
-            NoJq.showByTag(element);
+    static show(pattern: string){
+        let elements = document.querySelectorAll(pattern);
+        for(let e of elements){
+            NoJq.showElement(e);
         }
-
     }
 
     /**
@@ -157,4 +69,47 @@ class NoJq{
     static getText(_id: string){
         return document.getElementById(_id).textContent;
     }
+
+    /**
+    * vincula una acción con un evento
+    * @method setElementListener
+    * @param {string} _event - evento a vincular
+    * @param {ObjectNode} e - elemento al que se le agregará el evento
+    * @param {} listener - callback a llamar cuando se dispare el evento
+    */
+    static setElementListener(_event: string, e, listener){
+
+        if(!e) return;
+
+        if (!e.NoJq){
+            e.NoJq = {}; //registra los eventos agregados desde NoJquery
+            e.NoJq[_event] = listener; //por ejemplo esto guarda el evento click, con la función x
+            e.addEventListener(_event, listener);//lo registramos al elemento
+        }else{
+            if(e.NoJq[_event]){
+                // si ya existe registrado el evento en nuestro objeto NoJquery
+                // lo removemos del elemento
+                e.removeEventListener(_event, e.NoJq[_event]);
+            }
+            //agregamos o actualizamos nuestro objeto de eventos con el nuevo listener
+            e.NoJq[_event] = listener;
+            e.addEventListener(_event, listener);
+        }
+
+    }
+
+    /**
+    * vincula una acción con un evento para los elementos seleccionados
+    * @method setListener
+    * @param {string} pattern - patrón para buscar los elementos
+    * @param {string} _event - evento a vincular
+    * @param {} listener - callback a llamar cuando se dispare el evento
+    */
+    static setListener(pattern: string, _event: string, listener){
+        let elements = document.querySelectorAll(pattern);
+        for(let e of elements){
+            NoJq.setElementListener(_event, e, listener);
+        }
+    }
+
 }
